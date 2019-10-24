@@ -37,4 +37,4 @@ particle_data,file_head=whj.ImportFile('sample.txt')
 new_data=whj.GnerateModel(img_tag,rgb_dict,particle_data,True)
 
 #导出结果
-whj.ExportFile(file_head,new_data,'result.txt')
+#whj.ExportFile(file_head,new_data,'result.txt')

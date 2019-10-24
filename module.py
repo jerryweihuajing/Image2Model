@@ -520,107 +520,107 @@ def GnerateModel(img_tag,rgb_dict,particle_data,show=False):
     
         fig.savefig('original.png',dpi=300,bbox_inches='tight')
         
-#    print(max(y),min(y))
-    
-    #particle file
-    particle_dimensions=[max(y)-min(y),max(z)-min(z)]
-    
-    particle_length=max(particle_dimensions)
-    particle_height=min(particle_dimensions)
-    
-#    print(particle_length,particle_height)
-    
-    particle_ratio=particle_length/particle_height
-    
-    #print(particle_ratio,model_ratio)
-    
-    if particle_ratio>model_ratio:
-        
-        print('ERROR:Increase the thickness of particle cloud')
-        
-    else:
-        
-        #比较length
-#        print(particle_length,model_length)
-        
-        #缩放比率
-        shrink_ratio=particle_length/model_length
-        
-        #缩放之后新的维度
-        new_model_length=int(np.ceil(model_length*shrink_ratio))
-        new_model_height=int(np.ceil(model_height*shrink_ratio))
-        
-        new_shape=(new_model_height,new_model_length)
-        
-        #让model_length去逼近particle_length
-        new_img_tag=ResizeGrayNearby(img_tag,new_shape)
-        
-    #    plt.figure()
-    #    plt.imshow(new_img_tag)
-        
-        #暴力检索所有颗粒，对他们赋予颜色tag
-        tag=[]
-        
-        #重要的事情，将他们翻转，并改变索引
-        for k in range(len(particle_data)):
-            
-            #新索引
-            new_i=int(np.round(new_model_height-z[k]))
-            new_j=int(np.round(y[k]))
-            
-            #正常情况，在矩阵内
-            if 0<=new_i<new_model_height and 0<=new_j<new_model_length:
-                
-                tag.append(new_img_tag[new_i,new_j])
-                
-            #多出来的部分定义为None，随后消灭
-            else:
-                
-                tag.append(None)
-                
-        #删除None列表
-        new_data=[]
-        
-        for k in range(len(particle_data)):
-            
-            if tag[k] is not None:
-                
-                #为了输出整齐
-                new_data.append([x[k],
-                                 y[k],
-                                 z[k],
-                                 r[k],
-                                 tag[k]])
-    
-        #显示吗
-        if show:
-                
-            #验证一下new_data的准确性如何            
-            valid_y=[this_data[1] for this_data in new_data]
-            valid_z=[this_data[2] for this_data in new_data]
-            valid_r=[this_data[3] for this_data in new_data]
-            valid_tag=[this_data[4] for this_data in new_data]
-            
-            #用于plt的颜色索引
-            tag_list=list(rgb_dict.keys())
-            color_dict=dict(zip(tag_list,color_list[:len(tag_list)]))
-            
-            #画个有颜色的
-            fig=plt.figure()
-            
-            for k in range(len(new_data)):
-                
-                plt.plot(valid_y[k],
-                         valid_z[k],
-                         marker='o',
-                         markersize=valid_r[k],
-                         color=color_dict[valid_tag[k]])
-        
-            plt.axis('scaled')
-              
-            fig.savefig('final.png',dpi=300,bbox_inches='tight')
-            
-        return new_data
+##    print(max(y),min(y))
+#    
+#    #particle file
+#    particle_dimensions=[max(y)-min(y),max(z)-min(z)]
+#    
+#    particle_length=max(particle_dimensions)
+#    particle_height=min(particle_dimensions)
+#    
+##    print(particle_length,particle_height)
+#    
+#    particle_ratio=particle_length/particle_height
+#    
+#    #print(particle_ratio,model_ratio)
+#    
+#    if particle_ratio>model_ratio:
+#        
+#        print('ERROR:Increase the thickness of particle cloud')
+#        
+#    else:
+#        
+#        #比较length
+##        print(particle_length,model_length)
+#        
+#        #缩放比率
+#        shrink_ratio=particle_length/model_length
+#        
+#        #缩放之后新的维度
+#        new_model_length=int(np.ceil(model_length*shrink_ratio))
+#        new_model_height=int(np.ceil(model_height*shrink_ratio))
+#        
+#        new_shape=(new_model_height,new_model_length)
+#        
+#        #让model_length去逼近particle_length
+#        new_img_tag=ResizeGrayNearby(img_tag,new_shape)
+#        
+#    #    plt.figure()
+#    #    plt.imshow(new_img_tag)
+#        
+#        #暴力检索所有颗粒，对他们赋予颜色tag
+#        tag=[]
+#        
+#        #重要的事情，将他们翻转，并改变索引
+#        for k in range(len(particle_data)):
+#            
+#            #新索引
+#            new_i=int(np.round(new_model_height-z[k]))
+#            new_j=int(np.round(y[k]))
+#            
+#            #正常情况，在矩阵内
+#            if 0<=new_i<new_model_height and 0<=new_j<new_model_length:
+#                
+#                tag.append(new_img_tag[new_i,new_j])
+#                
+#            #多出来的部分定义为None，随后消灭
+#            else:
+#                
+#                tag.append(None)
+#                
+#        #删除None列表
+#        new_data=[]
+#        
+#        for k in range(len(particle_data)):
+#            
+#            if tag[k] is not None:
+#                
+#                #为了输出整齐
+#                new_data.append([x[k],
+#                                 y[k],
+#                                 z[k],
+#                                 r[k],
+#                                 tag[k]])
+#    
+#        #显示吗
+#        if show:
+#                
+#            #验证一下new_data的准确性如何            
+#            valid_y=[this_data[1] for this_data in new_data]
+#            valid_z=[this_data[2] for this_data in new_data]
+#            valid_r=[this_data[3] for this_data in new_data]
+#            valid_tag=[this_data[4] for this_data in new_data]
+#            
+#            #用于plt的颜色索引
+#            tag_list=list(rgb_dict.keys())
+#            color_dict=dict(zip(tag_list,color_list[:len(tag_list)]))
+#            
+#            #画个有颜色的
+#            fig=plt.figure()
+#            
+#            for k in range(len(new_data)):
+#                
+#                plt.plot(valid_y[k],
+#                         valid_z[k],
+#                         marker='o',
+#                         markersize=valid_r[k],
+#                         color=color_dict[valid_tag[k]])
+#        
+#            plt.axis('scaled')
+#              
+#            fig.savefig('final.png',dpi=300,bbox_inches='tight')
+#            
+#        return new_data
 
 #============================================================================== 
 #输出颗粒文件
